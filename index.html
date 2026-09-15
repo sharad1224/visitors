@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visitor Counter</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#4facfe,#00c6ff);
+}
+
+/* Main Content */
+.container{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width:100%;
+}
+
+.card{
+    width:350px;
+    background:#fff;
+    padding:30px;
+    border-radius:15px;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+.card h1{
+    color:#333;
+    margin-bottom:20px;
+}
+
+#count{
+    font-size:60px;
+    font-weight:bold;
+    color:#0d6efd;
+    margin:20px 0;
+}
+
+button{
+    padding:12px 22px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+    margin:5px;
+    transition:.3s;
+}
+
+.add{
+    background:#28a745;
+    color:#fff;
+}
+
+.add:hover{
+    background:#218838;
+}
+
+.reset{
+    background:#dc3545;
+    color:#fff;
+}
+
+.reset:hover{
+    background:#bb2d3b;
+}
+
+.card p{
+    margin-top:15px;
+    color:#666;
+}
+
+/* Footer */
+footer{
+    width:100%;
+    text-align:center;
+    background:#649ae5;
+    color:#fff;
+    padding:15px;
+    font-size:15px;
+}
+
+footer strong{
+    color:#042d39;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <h1>👥 Visitor Counter</h1>
+
+        <div id="count">0</div>
+
+        <button class="add" onclick="addVisitor()">
+            + Add Visitor
+        </button>
+
+        <button class="reset" onclick="resetCounter()">
+            Reset
+        </button>
+
+        <p>Count is saved in your <strong>visitors</strong> database.</p>
+
+    </div>
+
+</div>
+
+<footer>
+    Built and Designed By <strong>Sharad Patel</strong> &copy; 2026.
+</footer>
+
+<script>
+    const counter = document.getElementById("count");
+
+// Load current count
+function loadCounter() {
+
+    fetch("getCount.php")
+        .then(response => response.json())
+        .then(data => {
+
+            counter.innerHTML = data.total_visitors;
+
+        });
+
+}
+
+// Increment count
+function addVisitor() {
+
+    fetch("increment.php", {
+
+        method: "POST"
+
+    })
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        counter.innerHTML = data.total_visitors;
+
+    });
+
+}
+
+// Reset counter
+function resetCounter() {
+
+    if (!confirm("Reset Visitor Counter?"))
+        return;
+
+    fetch("reset.php", {
+
+        method: "POST"
+
+    })
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        counter.innerHTML = data.total_visitors;
+
+    });
+
+}
+
+loadCounter();
+</script>
+
+</body>
+</html>
